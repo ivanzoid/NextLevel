@@ -1336,7 +1336,12 @@ extension NextLevel {
         }
         
         var didChangeOrientation = false
-        let currentOrientation = AVCaptureVideoOrientation.avorientationFromUIDeviceOrientation(UIDevice.current.orientation)
+        var currentOrientation: NextLevelDeviceOrientation
+        if automaticallyUpdatesDeviceOrientation {
+            currentOrientation = AVCaptureVideoOrientation.avorientationFromUIDeviceOrientation(UIDevice.current.orientation)
+        } else {
+            currentOrientation = deviceOrientation
+        }
         
         if let previewConnection = self.previewLayer.connection {
             if previewConnection.isVideoOrientationSupported && previewConnection.videoOrientation != currentOrientation {
