@@ -2498,6 +2498,10 @@ extension NextLevel {
                     }
                 }
                 
+                if #available(iOS 13.0, *) {
+                    photoSettings.photoQualityPrioritization = .quality
+                }
+                
                 if self.isFlashAvailable {
                     photoSettings.flashMode = self.photoConfiguration.flashMode
                 }
