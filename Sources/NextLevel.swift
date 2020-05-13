@@ -1082,6 +1082,9 @@ extension NextLevel {
         
         if self._photoOutput == nil {
             self._photoOutput = AVCapturePhotoOutput()
+            if #available(iOS 13.0, *) {
+                self._photoOutput?.maxPhotoQualityPrioritization = .quality
+            }
         }
         
         if let session = self._captureSession, let photoOutput = self._photoOutput {
