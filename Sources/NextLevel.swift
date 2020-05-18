@@ -1378,6 +1378,8 @@ extension NextLevel {
                 if videoConnection.isVideoStabilizationSupported {
                     videoConnection.preferredVideoStabilizationMode = self.videoStabilizationMode
                 }
+
+                videoDelegate?.nextLevel(self, didUpdateVideoOutputSettingsWithConnection: videoConnection)
             }
         }
     }
@@ -2501,9 +2503,7 @@ extension NextLevel {
                     }
                 }
                 
-                if #available(iOS 13.0, *) {
-                    photoSettings.photoQualityPrioritization = .quality
-                }
+                photoDelegate?.nextLevel(self, willCapturePhotoWithSettings: photoSettings)
                 
                 if self.isFlashAvailable {
                     photoSettings.flashMode = self.photoConfiguration.flashMode

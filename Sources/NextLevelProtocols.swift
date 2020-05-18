@@ -162,12 +162,15 @@ public protocol NextLevelVideoDelegate: AnyObject {
     // video frame photo
     func nextLevel(_ nextLevel: NextLevel, didCompletePhotoCaptureFromVideoFrame photoDict: [String : Any]?)
     
+    func nextLevel(_ nextLevel: NextLevel, didUpdateVideoOutputSettingsWithConnection connection: AVCaptureConnection)
 }
 
 // MARK: - NextLevelPhotoDelegate
 
 /// Photo delegate, provides updates on photo related capture functionality.
 public protocol NextLevelPhotoDelegate: AnyObject {
+    
+    func nextLevel(_ nextLevel: NextLevel, willCapturePhotoWithSettings settings: AVCapturePhotoSettings)
     
     func nextLevel(_ nextLevel: NextLevel, willCapturePhotoWithConfiguration photoConfiguration: NextLevelPhotoConfiguration)
     func nextLevel(_ nextLevel: NextLevel, didCapturePhotoWithConfiguration photoConfiguration: NextLevelPhotoConfiguration)
