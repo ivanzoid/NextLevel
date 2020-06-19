@@ -112,32 +112,34 @@ extension AVCaptureDevice {
         return nil
     }
     
-    /// Returns the primary duo camera video device, if available, else the default wide angel camera, otherwise nil.
+    /// Returns the primary video device. Selects first device which is available from the following list:
+    /// triple camera, dual camera, wide angle camera, ultra wide angle camera, telephoto camera.
     ///
     /// - Parameter position: Desired position of the device
     /// - Returns: Primary video capture device found, otherwise nil
     public class func primaryVideoDevice(forPosition position: AVCaptureDevice.Position) -> AVCaptureDevice? {
-        var deviceTypes: [AVCaptureDevice.DeviceType] = [AVCaptureDevice.DeviceType.builtInWideAngleCamera]
+        var deviceTypes: [AVCaptureDevice.DeviceType] = []
+        
+        if #available(iOS 13.0, *) {
+            deviceTypes.append(.builtInTripleCamera)
+            deviceTypes.append(.builtInDualWideCamera)
+        }
         if #available(iOS 11.0, *) {
             deviceTypes.append(.builtInDualCamera)
-        } else {
-            deviceTypes.append(.builtInDuoCamera)
         }
-        
-        // prioritize duo camera systems before wide angle
-        let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: deviceTypes, mediaType: AVMediaType.video, position: position)
-        for device in discoverySession.devices {
-            if #available(iOS 11.0, *) {
-                if (device.deviceType == AVCaptureDevice.DeviceType.builtInDualCamera) {
-                    return device
-                }
-            } else {
-                if (device.deviceType == AVCaptureDevice.DeviceType.builtInDuoCamera) {
-                    return device
-                }
+        deviceTypes.append(.builtInWideAngleCamera)
+        if #available(iOS 13.0, *) {
+            deviceTypes.append(.builtInUltraWideCamera)
+        }
+        deviceTypes.append(.builtInTelephotoCamera)
+
+        for deviceType in deviceTypes {
+            if let device = AVCaptureDevice.default(deviceType, for: .video, position: position) {
+                return device
             }
         }
-        return discoverySession.devices.first
+
+        return nil
     }
     
     /// Returns the default video capture device, otherwise nil.
@@ -300,4 +302,43 @@ extension AVCaptureVideoOrientation {
         return avorientation
     }
     
+}
+
+extension AVCaptureDevice.DeviceType {
+    public var nextLevelDeviceType: NextLevelDeviceType? {
+        if self == .builtInWideAngleCamera {
+            return .wideAngleCamera
+        }
+        if self == .builtInDuoCamera {
+            return .duoCamera
+        }
+        if self == .builtInTelephotoCamera {
+            return .telephotoCamera
+        }
+        if #available(iOS 10.2, *) {
+            if self == .builtInDualCamera {
+                return .duoCamera
+            }
+        }
+        #if USE_TRUE_DEPTH
+        if #available(iOS 11.1, *) {
+            if self == .builtInTrueDepthCamera {
+                return .trueDepthCamera
+            }
+        }
+        #endif
+        if #available(iOS 13.0, *) {
+            if self == .builtInTripleCamera {
+                return .tripleCamera
+            }
+            if self == .builtInDualWideCamera {
+                return .dualWideCamera
+            }
+            if self == .builtInUltraWideCamera {
+                return .ultraWideAngleCamera
+            }
+        }
+        
+        return nil
+    }
 }

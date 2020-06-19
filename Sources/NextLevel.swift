@@ -59,6 +59,7 @@ public enum NextLevelDeviceType: Int, CustomStringConvertible {
     case wideAngleCamera
     case telephotoCamera
     case duoCamera
+    case dualWideCamera
     case ultraWideAngleCamera
     case tripleCamera
     #if USE_TRUE_DEPTH
@@ -79,14 +80,20 @@ public enum NextLevelDeviceType: Int, CustomStringConvertible {
             } else {
                 return AVCaptureDevice.DeviceType.builtInDuoCamera
             }
-            #if USE_TRUE_DEPTH
+        case .dualWideCamera:
+            if #available(iOS 13.0, *) {
+                return AVCaptureDevice.DeviceType.builtInDualWideCamera
+            } else {
+                return AVCaptureDevice.DeviceType(rawValue: "Unavailable")
+            }
+        #if USE_TRUE_DEPTH
         case .trueDepthCamera:
             if #available(iOS 11.1, *) {
                 return AVCaptureDevice.DeviceType.builtInTrueDepthCamera
             } else {
                 return AVCaptureDevice.DeviceType(rawValue: "Unavailable")
             }
-            #endif
+        #endif
         case .ultraWideAngleCamera:
             if #available(iOS 13.0, *) {
                 return AVCaptureDevice.DeviceType.builtInUltraWideCamera
@@ -113,6 +120,8 @@ public enum NextLevelDeviceType: Int, CustomStringConvertible {
                 return "Telephoto Camera"
             case .duoCamera:
                 return "Duo Camera"
+            case .dualWideCamera:
+                return "Dual Wide Camera"
             case .ultraWideAngleCamera:
                 return "Ultra Wide Angle Camera"
             case .tripleCamera:
@@ -400,6 +409,13 @@ public class NextLevel: NSObject {
             }
             return self._ciContext
         }
+    }
+    
+    public var currentDeviceType: NextLevelDeviceType? {
+        guard let device = _currentDevice else {
+            return nil
+        }
+        return device.deviceType.nextLevelDeviceType
     }
     
     // MARK: - private instance vars
@@ -817,6 +833,7 @@ extension NextLevel {
         
         if shouldConfigureVideo {
             DispatchQueue.main.async {
+                self.updateVideoZoomFactorIfNeeded()
                 self.delegate?.nextLevel(self, didUpdateVideoConfiguration: self.videoConfiguration)
             }
         }
@@ -826,6 +843,14 @@ extension NextLevel {
                 self.delegate?.nextLevel(self, didUpdateAudioConfiguration: self.audioConfiguration)
             }
         }
+    }
+    
+    internal func updateVideoZoomFactorIfNeeded() {
+        guard let device = self._currentDevice else {
+            return
+        }
+
+        videoZoomFactor = 1.0 / smartVideoZoomFactorMultiplier(for: device)
     }
     
     internal func configureSession() {
@@ -963,6 +988,7 @@ extension NextLevel {
                 if captureDevice.isLowLightBoostSupported {
                     captureDevice.automaticallyEnablesLowLightBoostWhenAvailable = true
                 }
+
                 captureDevice.unlockForConfiguration()
             }
             catch {
@@ -2282,6 +2308,19 @@ extension NextLevel {
         }
     }
     
+    public var smartVideoZoomFactor: Float {
+        get {
+            return videoZoomFactor * smartVideoZoomFactorMultiplier()
+        }
+        set {
+            videoZoomFactor = newValue / smartVideoZoomFactorMultiplier()
+        }
+    }
+    
+    public var minSmartVideoZoomFactor: Float {
+        smartVideoZoomFactorMultiplier()
+    }
+    
     /// Triggers a photo capture from the last video frame.
     public func capturePhotoFromVideo() {
         
@@ -2464,6 +2503,38 @@ extension NextLevel {
         }
     }
     
+    internal func smartVideoZoomFactorMultiplier(for device: AVCaptureDevice) -> Float {
+        let deviceType = device.deviceType
+
+        if deviceType == .builtInWideAngleCamera || deviceType == .builtInDuoCamera {
+            return 1
+        }
+        if deviceType == .builtInTelephotoCamera {
+            return 2
+        }
+        if #available(iOS 10.2, *) {
+            if deviceType == .builtInDualCamera {
+                return 1
+            }
+        }
+        if #available(iOS 13.0, *) {
+            if deviceType == .builtInTripleCamera
+                || deviceType == .builtInDualWideCamera
+                || deviceType == .builtInUltraWideCamera {
+                return 0.5
+            }
+        }
+        
+        return 1
+    }
+    
+    internal func smartVideoZoomFactorMultiplier() -> Float {
+        guard let device = self._currentDevice else {
+            return 1
+        }
+
+        return smartVideoZoomFactorMultiplier(for: device)
+    }
 }
 
 // MARK: - photo capture
@@ -3267,3 +3338,4 @@ extension NextLevel {
     }
     
 }
+
