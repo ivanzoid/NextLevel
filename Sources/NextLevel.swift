@@ -2291,19 +2291,29 @@ extension NextLevel {
             return 1.0 // prefer 1.0 instead of using an optional
         }
         set {
-            self.executeClosureAsyncOnSessionQueueIfNecessary {
-                if let device = self._currentDevice {
-                    do {
-                        try device.lockForConfiguration()
-                        
-                        let zoom: Float = max(1, min(newValue, Float(device.activeFormat.videoMaxZoomFactor)))
-                        device.videoZoomFactor = CGFloat(zoom)
-                        
-                        device.unlockForConfiguration()
-                    } catch {
-                        print("NextLevel, zoomFactor failed to lock device for configuration")
-                    }
+            setVideoZoomFactor(newValue, animated: false)
+        }
+    }
+    
+    public func setVideoZoomFactor(_ videoZoomFactor: Float, animated: Bool, rate: Float = 1) {
+        self.executeClosureAsyncOnSessionQueueIfNecessary {
+            guard let device = self._currentDevice else {
+                return
+            }
+            do {
+                try device.lockForConfiguration()
+                
+                let zoom: Float = max(1, min(videoZoomFactor, Float(device.activeFormat.videoMaxZoomFactor)))
+                
+                if animated {
+                    device.ramp(toVideoZoomFactor: CGFloat(zoom), withRate: rate)
+                } else {
+                    device.videoZoomFactor = CGFloat(zoom)
                 }
+                
+                device.unlockForConfiguration()
+            } catch {
+                print("NextLevel, zoomFactor failed to lock device for configuration")
             }
         }
     }
@@ -2316,7 +2326,11 @@ extension NextLevel {
             videoZoomFactor = newValue / smartVideoZoomFactorMultiplier()
         }
     }
-    
+
+    public func setSmartVideoZoomFactor(_ videoZoomFactor: Float, animated: Bool, rate: Float = 10) {
+        setVideoZoomFactor(videoZoomFactor / smartVideoZoomFactorMultiplier(), animated: animated, rate: rate)
+    }
+
     public var minSmartVideoZoomFactor: Float {
         smartVideoZoomFactorMultiplier()
     }
