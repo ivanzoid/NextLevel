@@ -5,6 +5,8 @@
 //
 
 #include "Base.xcconfig"
+#include "../Pods/Target Support Files/Pods-NextLevel/Pods-NextLevel.debug.xcconfig"
+#include "../Pods/Target Support Files/Pods-NL/Pods-NL.debug.xcconfig"
 
 SWIFT_OPTIMIZATION_LEVEL = -Onone
 GCC_OPTIMIZATION_LEVEL = 0
@@ -51,4 +53,3 @@ COPY_PHASE_STRIP = NO
 ONLY_ACTIVE_ARCH = YES
 
 OTHER_CFLAGS[sdk=iphone*] = $(OTHER_CFLAGS) -Wall -Wconversion -Wundeclared-selector -Wobjc-autosynthesis-property-ivar-name-match
-

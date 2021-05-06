@@ -1,0 +1,24 @@
+PODS:
+  - Logging (1.4.0)
+  - NextLevel (0.17.0):
+    - Logging (~> 1.4.0)
+
+DEPENDENCIES:
+  - Logging (~> 1.4.0)
+  - NextLevel (from `.`)
+
+SPEC REPOS:
+  trunk:
+    - Logging
+
+EXTERNAL SOURCES:
+  NextLevel:
+    :path: "."
+
+SPEC CHECKSUMS:
+  Logging: beeb016c9c80cf77042d62e83495816847ef108b
+  NextLevel: 7ba6ede7803e4d61cccfe1037213aad190048729
+
+PODFILE CHECKSUM: 5e53388760801bce0dd7db720b3a65ca537ef0ce
+
+COCOAPODS: 1.10.1
