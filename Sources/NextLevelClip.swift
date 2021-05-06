@@ -97,7 +97,7 @@ public class NextLevelClip {
                     let uiimage: UIImage = UIImage(cgImage: cgimage)
                     self._thumbnailImage = uiimage
                 } catch {
-                    print("NextLevel, unable to generate lastFrameImage for \(String(describing: self.url?.absoluteString)))")
+                    NextLevelLogger.error("unable to generate lastFrameImage for \(String(describing: self.url?.absoluteString)))")
                     self._thumbnailImage = nil
                 }
             }
@@ -122,7 +122,7 @@ public class NextLevelClip {
                 let uiimage: UIImage = UIImage(cgImage: cgimage)
                 self._lastFrameImage = uiimage
             } catch {
-                print("NextLevel, unable to generate lastFrameImage for \(String(describing: self.url?.absoluteString))")
+                NextLevelLogger.error("unable to generate lastFrameImage for \(String(describing: self.url?.absoluteString))")
                 self._lastFrameImage = nil
             }
 
@@ -243,7 +243,7 @@ public class NextLevelClip {
                 self.url = nil
             }
         } catch {
-            print("NextLevel, error deleting a clip's file \(String(describing: self.url?.absoluteString))")
+            NextLevelLogger.error("error deleting a clip's file \(String(describing: self.url?.absoluteString))")
         }
     }
 

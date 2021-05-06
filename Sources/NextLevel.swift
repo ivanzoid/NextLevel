@@ -408,7 +408,7 @@ public class NextLevel: NSObject {
             return self._ciContext
         }
     }
-
+    
     // MARK: - private instance vars
 
     internal var _sessionQueue: DispatchQueue
@@ -544,7 +544,7 @@ extension NextLevel {
         case .notDetermined:
             break
         @unknown default:
-            debugPrint("unknown authorization type")
+            NextLevelLogger.debug("unknown authorization type")
             break
         }
         return nextLevelStatus
@@ -855,7 +855,7 @@ extension NextLevel {
                 if session.canSetSessionPreset(self.videoConfiguration.preset) {
                     session.sessionPreset = self.videoConfiguration.preset
                 } else {
-                    print("NextLevel, could not set preset on session")
+                    NextLevelLogger.error("could not set preset on session")
                 }
             }
 
@@ -874,7 +874,7 @@ extension NextLevel {
                 if session.canSetSessionPreset(self.photoConfiguration.preset) {
                     session.sessionPreset = self.photoConfiguration.preset
                 } else {
-                    print("NextLevel, could not set preset on session")
+                    NextLevelLogger.error("could not set preset on session")
                 }
             }
 
@@ -973,7 +973,7 @@ extension NextLevel {
                 }
                 captureDevice.unlockForConfiguration()
             } catch {
-                print("NextLevel, low light failed to lock device for configuration")
+                NextLevelLogger.error("low light failed to lock device for configuration")
             }
         }
 
@@ -1005,7 +1005,7 @@ extension NextLevel {
                 return true
             }
         } catch {
-            print("NextLevel, failure adding input device")
+            NextLevelLogger.error("failure adding input device")
         }
         return false
     }
@@ -1064,7 +1064,7 @@ extension NextLevel {
                 return true
             }
         }
-        print("NextLevel, couldn't add video output to session")
+        NextLevelLogger.error("couldn't add video output to session")
         return false
 
     }
@@ -1082,7 +1082,7 @@ extension NextLevel {
                 return true
             }
         }
-        print("NextLevel, couldn't add audio output to session")
+        NextLevelLogger.error("couldn't add audio output to session")
         return false
 
     }
@@ -1100,7 +1100,7 @@ extension NextLevel {
                 return true
             }
         }
-        print("NextLevel, couldn't add photo output to session")
+        NextLevelLogger.error("couldn't add photo output to session")
         return false
 
     }
@@ -1132,7 +1132,7 @@ extension NextLevel {
                 return true
             }
         }
-        print("NextLevel, couldn't add movie output to session")
+        NextLevelLogger.error("couldn't add movie output to session")
         return false
 
     }
@@ -1158,7 +1158,7 @@ extension NextLevel {
                 }
             }
         }
-        print("NextLevel, couldn't add depth data output to session")
+        NextLevelLogger.error("couldn't add depth data output to session")
         return false
     }
     #endif
@@ -1177,7 +1177,7 @@ extension NextLevel {
             photoOutput.isPortraitEffectsMatteDeliveryEnabled = true
             return true
         }
-        print("NextLevel, couldn't enable portrait effects matte delivery in the output")
+        NextLevelLogger.error("couldn't enable portrait effects matte delivery in the output")
         return false
     }
 
@@ -1528,7 +1528,7 @@ extension NextLevel {
                     }
                     device.unlockForConfiguration()
                 } catch {
-                    print("NextLevel, torchMode failed to lock device for configuration")
+                    NextLevelLogger.error("torchMode failed to lock device for configuration")
                 }
             }
         }
@@ -1594,7 +1594,7 @@ extension NextLevel {
                     device.focusMode = newValue
                     device.unlockForConfiguration()
                 } catch {
-                    print("NextLevel, focusMode failed to lock device for configuration")
+                    NextLevelLogger.error("focusMode failed to lock device for configuration")
                 }
             }
         }
@@ -1625,7 +1625,7 @@ extension NextLevel {
 
                 device.unlockForConfiguration()
             } catch {
-                print("NextLevel, lens position failed to lock device for configuration")
+                NextLevelLogger.error("lens position failed to lock device for configuration")
             }
         }
     }
@@ -1666,7 +1666,7 @@ extension NextLevel {
 
             device.unlockForConfiguration()
         } catch {
-            print("NextLevel, focusExposeAndAdjustWhiteBalance failed to lock device for configuration")
+            NextLevelLogger.error("focusExposeAndAdjustWhiteBalance failed to lock device for configuration")
         }
     }
 
@@ -1692,7 +1692,7 @@ extension NextLevel {
 
             device.unlockForConfiguration()
         } catch {
-            print("NextLevel, focusAtAdjustedPointOfInterest failed to lock device for configuration")
+            NextLevelLogger.error("focusAtAdjustedPointOfInterest failed to lock device for configuration")
         }
     }
 
@@ -1742,7 +1742,7 @@ extension NextLevel {
 
                 device.unlockForConfiguration()
             } catch {
-                print("NextLevel, exposureMode failed to lock device for configuration")
+                NextLevelLogger.error("exposureMode failed to lock device for configuration")
             }
         }
     }
@@ -1768,7 +1768,7 @@ extension NextLevel {
 
             device.unlockForConfiguration()
         } catch {
-            print("NextLevel, exposeAtAdjustedPointOfInterest failed to lock device for configuration")
+            NextLevelLogger.error("exposeAtAdjustedPointOfInterest failed to lock device for configuration")
         }
     }
 
@@ -1799,7 +1799,7 @@ extension NextLevel {
 
             device.unlockForConfiguration()
         } catch {
-            print("NextLevel, setExposureModeCustom failed to lock device for configuration")
+            NextLevelLogger.error("setExposureModeCustom failed to lock device for configuration")
         }
     }
 
@@ -1822,7 +1822,7 @@ extension NextLevel {
 
             device.unlockForConfiguration()
         } catch {
-            print("NextLevel, setExposureModeCustom failed to lock device for configuration")
+            NextLevelLogger.error("setExposureModeCustom failed to lock device for configuration")
         }
     }
 
@@ -1845,7 +1845,7 @@ extension NextLevel {
 
             device.unlockForConfiguration()
         } catch {
-            print("NextLevel, setExposureTargetBias failed to lock device for configuration")
+            NextLevelLogger.error("setExposureTargetBias failed to lock device for configuration")
         }
     }
 
@@ -1893,7 +1893,7 @@ extension NextLevel {
                     device.whiteBalanceMode = newValue
                     device.unlockForConfiguration()
                 } catch {
-                    print("NextLevel, whiteBalanceMode failed to lock device for configuration")
+                    NextLevelLogger.error("whiteBalanceMode failed to lock device for configuration")
                 }
             }
         }
@@ -1925,7 +1925,7 @@ extension NextLevel {
                     device.deviceWhiteBalanceGains(for: temperatureAndTint)
                     device.unlockForConfiguration()
                 } catch {
-                    print("NextLevel, deviceWhiteBalanceGains failed to lock device for configuration")
+                    NextLevelLogger.error("deviceWhiteBalanceGains failed to lock device for configuration")
                 }
             }
         }
@@ -1955,7 +1955,7 @@ extension NextLevel {
                     device.deviceWhiteBalanceGains(for: temperatureAndTint)
                     device.unlockForConfiguration()
                 } catch {
-                    print("NextLevel, deviceWhiteBalanceGains failed to lock device for configuration")
+                    NextLevelLogger.error("deviceWhiteBalanceGains failed to lock device for configuration")
                 }
             }
         }
@@ -1978,7 +1978,7 @@ extension NextLevel {
 
             device.unlockForConfiguration()
         } catch {
-            print("NextLevel, setWhiteBalanceModeLocked failed to lock device for configuration")
+            NextLevelLogger.error("setWhiteBalanceModeLocked failed to lock device for configuration")
         }
     }
 
@@ -2054,7 +2054,7 @@ extension NextLevel {
 
                 device.unlockForConfiguration()
             } catch {
-                print("NextLevel, focus ending failed to lock device for configuration")
+                NextLevelLogger.error("focus ending failed to lock device for configuration")
             }
         }
 
@@ -2086,7 +2086,7 @@ extension NextLevel {
 
                 device.unlockForConfiguration()
             } catch {
-                print("NextLevel, focus ending failed to lock device for configuration")
+                NextLevelLogger.error("focus ending failed to lock device for configuration")
             }
         }
 
@@ -2136,7 +2136,7 @@ extension NextLevel {
                 }
                 guard device.activeFormat.isSupported(withFrameRate: newValue)
                     else {
-                        print("unsupported frame rate for current device format config, \(newValue) fps")
+                    NextLevelLogger.error("unsupported frame rate for current device format config, \(newValue) fps")
                         return
                 }
 
@@ -2149,7 +2149,7 @@ extension NextLevel {
 
                     device.unlockForConfiguration()
                 } catch {
-                    print("NextLevel, frame rate failed to lock device for configuration")
+                    NextLevelLogger.error("frame rate failed to lock device for configuration")
                 }
             }
         }
@@ -2208,10 +2208,10 @@ extension NextLevel {
                         self.deviceDelegate?.nextLevel(self, didChangeDeviceFormat: format)
                     }
                 } catch {
-                    print("NextLevel, active device format failed to lock device for configuration")
+                    NextLevelLogger.error("active device format failed to lock device for configuration")
                 }
             } else {
-                print("Nextlevel, could not find a current device format matching the requirements")
+                NextLevelLogger.error("could not find a current device format matching the requirements")
             }
 
         }
@@ -2252,7 +2252,7 @@ extension NextLevel {
                     device.unlockForConfiguration()
                 } catch {
                     // Handle error.
-                    print("NextLevel, failed to lock device on the highest frame rate")
+                    NextLevelLogger.error("failed to lock device on the highest frame rate")
                 }
             }
         }
@@ -2308,7 +2308,7 @@ extension NextLevel {
 
                         device.unlockForConfiguration()
                     } catch {
-                        print("NextLevel, zoomFactor failed to lock device for configuration")
+                        NextLevelLogger.error("zoomFactor failed to lock device for configuration")
                     }
                 }
             }
@@ -2563,7 +2563,7 @@ extension NextLevel {
             if let settings = self.videoConfiguration.avcaptureSettingsDictionary(sampleBuffer: sampleBuffer),
                 let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
                 if !session.setupVideo(withSettings: settings, configuration: self.videoConfiguration, formatDescription: formatDescription) {
-                    print("NextLevel, could not setup video session")
+                    NextLevelLogger.error("could not setup video session")
                 }
             }
             DispatchQueue.main.async {
@@ -2637,7 +2637,7 @@ extension NextLevel {
         if session.isVideoSetup == false {
             if let settings = self.videoConfiguration.avcaptureSettingsDictionary(pixelBuffer: pixelBuffer) {
                 if !session.setupVideo(withSettings: settings, configuration: self.videoConfiguration) {
-                    print("NextLevel, could not setup video session")
+                    NextLevelLogger.error("could not setup video session")
                 }
             }
             DispatchQueue.main.async {
@@ -2706,7 +2706,7 @@ extension NextLevel {
             if let settings = self.audioConfiguration.avcaptureSettingsDictionary(sampleBuffer: sampleBuffer),
                 let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) {
                 if !session.setupAudio(withSettings: settings, configuration: self.audioConfiguration, formatDescription: formatDescription) {
-                    print("NextLevel, could not setup audio session")
+                    NextLevelLogger.error("could not setup audio session")
                 }
             }
 
@@ -3011,7 +3011,7 @@ extension NextLevel {
             if let error = notification.userInfo?[AVCaptureSessionErrorKey] as? AVError {
                 switch error.code {
                 case .deviceIsNotAvailableInBackground:
-                    print("NextLevel, error, media services are not available in the background")
+                    NextLevelLogger.error("error, media services are not available in the background")
                     break
                 case .mediaServicesWereReset:
                     fallthrough
@@ -3238,7 +3238,7 @@ extension NextLevel {
 
                     captureDevice.unlockForConfiguration()
                 } catch {
-                    print("NextLevel, failed to lock device for white balance exposure configuration")
+                    NextLevelLogger.error("failed to lock device for white balance exposure configuration")
                 }
             }
 

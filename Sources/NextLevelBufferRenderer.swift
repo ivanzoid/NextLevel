@@ -243,7 +243,7 @@ extension NextLevelBufferRenderer {
             var viewport = CGRect(x: 0, y: 0, width: texture.width, height: texture.height)
             if presentationAspectRatio != textureAspectRatio {
                 // aspectFill
-                // print("texture \(texture.width) \(texture.height) \(self._presentationFrame.size.width) \(self._presentationFrame.size.height)")
+                // NextLevelLogger.debug("texture \(texture.width) \(texture.height) \(self._presentationFrame.size.width) \(self._presentationFrame.size.height)")
                 let scaleFactorWidth = CGFloat(CGFloat(texture.width) / self._presentationFrame.size.width)
                 viewport = CGRect(x: 0, y: Int(CGFloat(texture.height - Int(self._presentationFrame.size.height * scaleFactorWidth)) * 0.5),
                                   width: texture.width, height: Int(self._presentationFrame.size.height * scaleFactorWidth) )

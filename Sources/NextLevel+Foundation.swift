@@ -55,7 +55,7 @@ extension Data {
                 if success == true {
                     imageDataWithMetadata = mutableData as Data
                 } else {
-                    print("could not finalize image with metadata")
+                    NextLevelLogger.error("could not finalize image with metadata")
                 }
             }
         }
@@ -102,7 +102,7 @@ extension FileManager {
                 }
             }
         } catch {
-            print("could not determine user attributes of file system")
+            NextLevelLogger.error("could not determine user attributes of file system")
             return 0
         }
         return 0
