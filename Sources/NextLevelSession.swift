@@ -261,7 +261,7 @@ extension NextLevelSession {
                 let _ = settings?[AVVideoHeightKey] {
                 self._videoInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: settings)
             } else {
-                print("NextLevelSession, configuration failure for video output")
+                NextLevelLogger.error("NextLevelSession, configuration failure for video output")
                 self._videoInput = nil
                 return false
             }
@@ -320,7 +320,7 @@ extension NextLevelSession {
                     if writer.canAdd(videoInput) {
                         writer.add(videoInput)
                     } else {
-                        print("NextLevel, could not add video input to session")
+                        NextLevelLogger.error("could not add video input to session")
                     }
                 }
 
@@ -328,7 +328,7 @@ extension NextLevelSession {
                     if writer.canAdd(audioInput) {
                         writer.add(audioInput)
                     } else {
-                        print("NextLevel, could not add audio input to session")
+                        NextLevelLogger.error("could not add audio input to session")
                     }
                 }
 
@@ -337,12 +337,12 @@ extension NextLevelSession {
                     self._startTimestamp = CMTime.invalid
                     self._currentClipHasStarted = true
                 } else {
-                    print("NextLevel, writer encountered an error \(String(describing: writer.error))")
+                    NextLevelLogger.error("writer encountered an error \(String(describing: writer.error))")
                     self._writer = nil
                 }
             }
         } catch {
-            print("NextLevel could not create asset writer")
+            NextLevelLogger.error("NextLevel could not create asset writer")
         }
     }
 
@@ -536,7 +536,7 @@ extension NextLevelSession {
                 self._currentClipHasAudio = false
                 self._currentClipHasVideo = false
             } else {
-                print("NextLevel, clip has already been created.")
+                NextLevelLogger.warning("clip has already been created.")
             }
         }
     }
@@ -563,7 +563,7 @@ extension NextLevelSession {
                                 }
                             }
                         } else {
-                            // print("ending session \(CMTimeGetSeconds(self._currentClipDuration))")
+                            // NextLevelLogger.debug("ending session \(CMTimeGetSeconds(self._currentClipDuration))")
                             writer.endSession(atSourceTime: CMTimeAdd(self._currentClipDuration, self._startTimestamp))
                             writer.finishWriting(completionHandler: {
                                 self.executeClosureSyncOnSessionQueueIfNecessary {
@@ -721,7 +721,7 @@ extension NextLevelSession {
             if !self._clips.isEmpty {
 
                 if self._clips.count == 1 {
-                    debugPrint("NextLevel, warning, a merge was requested for a single clip, use lastClipUrl instead")
+                    NextLevelLogger.warning("a merge was requested for a single clip, use lastClipUrl instead")
                 }
 
                 asset = self.asset
@@ -826,7 +826,7 @@ extension NextLevelSession {
             do {
                 try compositionTrack.insertTimeRange(timeRange, of: track, at: startTime)
             } catch {
-                print("NextLevel, failed to insert composition track")
+                NextLevelLogger.error("failed to insert composition track")
             }
             return (startTime + timeRange.duration)
         }
@@ -855,7 +855,7 @@ extension NextLevelSession {
             do {
                 try FileManager.default.removeItem(atPath: fileUrl.path)
             } catch {
-                print("NextLevel, could not remove file at path")
+                NextLevelLogger.error("could not remove file at path")
             }
         }
     }

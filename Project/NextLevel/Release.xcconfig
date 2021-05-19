@@ -5,6 +5,8 @@
 //
 
 #include "Base.xcconfig"
+#include "../Pods/Target Support Files/Pods-NextLevel/Pods-NextLevel.release.xcconfig"
+#include "../Pods/Target Support Files/Pods-NL/Pods-NL.release.xcconfig"
 
 DEAD_CODE_STRIPPING = YES
 COPY_PHASE_STRIP = YES
@@ -13,5 +15,5 @@ VALIDATE_PRODUCT = YES
 SWIFT_OPTIMIZATION_LEVEL = -Owholemodule
 GCC_OPTIMIZATION_LEVEL = s
 
-GCC_PREPROCESSOR_DEFINITIONS = _LIBCPP_VISIBLE= NDEBUG=1 NS_BLOCK_ASSERTIONS=1
+GCC_PREPROCESSOR_DEFINITIONS = $(INHERITED) _LIBCPP_VISIBLE= NDEBUG=1 NS_BLOCK_ASSERTIONS=1
 OTHER_CFLAGS[sdk=iphone*] = $(OTHER_CFLAGS) -DNS_BLOCK_ASSERTIONS=1

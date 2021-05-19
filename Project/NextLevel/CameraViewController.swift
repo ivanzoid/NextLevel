@@ -192,37 +192,37 @@ class CameraViewController: UIViewController {
             do {
                 try NextLevel.shared.start()
             } catch {
-                print("NextLevel, failed to start camera session")
+                NextLevelLogger.error("failed to start camera session")
             }
         } else {
             NextLevel.requestAuthorization(forMediaType: AVMediaType.video) { (mediaType, status) in
-                print("NextLevel, authorization updated for media \(mediaType) status \(status)")
+                NextLevelLogger.info("authorization updated for media \(mediaType) status \(status)")
                 if NextLevel.authorizationStatus(forMediaType: AVMediaType.video) == .authorized &&
                     NextLevel.authorizationStatus(forMediaType: AVMediaType.audio) == .authorized {
                     do {
                         let nextLevel = NextLevel.shared
                         try nextLevel.start()
                     } catch {
-                        print("NextLevel, failed to start camera session")
+                        NextLevelLogger.error("failed to start camera session")
                     }
                 } else if status == .notAuthorized {
                     // gracefully handle when audio/video is not authorized
-                    print("NextLevel doesn't have authorization for audio or video")
+                    NextLevelLogger.error("NextLevel doesn't have authorization for audio or video")
                 }
             }
             NextLevel.requestAuthorization(forMediaType: AVMediaType.audio) { (mediaType, status) in
-                print("NextLevel, authorization updated for media \(mediaType) status \(status)")
+                NextLevelLogger.error("authorization updated for media \(mediaType) status \(status)")
                 if NextLevel.authorizationStatus(forMediaType: AVMediaType.video) == .authorized &&
                     NextLevel.authorizationStatus(forMediaType: AVMediaType.audio) == .authorized {
                     do {
                         let nextLevel = NextLevel.shared
                         try nextLevel.start()
                     } catch {
-                        print("NextLevel, failed to start camera session")
+                        NextLevelLogger.error("failed to start camera session")
                     }
                 } else if status == .notAuthorized {
                     // gracefully handle when audio/video is not authorized
-                    print("NextLevel doesn't have authorization for audio or video")
+                    NextLevelLogger.error("NextLevel doesn't have authorization for audio or video")
                 }
             }
         }
@@ -284,7 +284,7 @@ extension CameraViewController {
                     if let url = url {
                         self.saveVideo(withURL: url)
                     } else if let _ = error {
-                        print("failed to merge clips at the end of capture \(String(describing: error))")
+                        NextLevelLogger.error("failed to merge clips at the end of capture \(String(describing: error))")
                     }
                 })
             } else if let lastClipUrl = session.lastClipUrl {
@@ -294,7 +294,7 @@ extension CameraViewController {
                     if error == nil, let url = clip?.url {
                         self.saveVideo(withURL: url)
                     } else {
-                        print("Error saving video: \(error?.localizedDescription ?? "")")
+                        NextLevelLogger.error("Error saving video: \(error?.localizedDescription ?? "")")
                     }
                 })
             } else {
@@ -406,7 +406,7 @@ extension CameraViewController {
                     })
                 }
             } else if let _ = error1 {
-                print("failure capturing photo from video frame \(String(describing: error1))")
+                NextLevelLogger.error("failure capturing photo from video frame \(String(describing: error1))")
             }
 
         })
@@ -505,15 +505,15 @@ extension CameraViewController: NextLevelDelegate {
 
     // session
     func nextLevelSessionWillStart(_ nextLevel: NextLevel) {
-        print("nextLevelSessionWillStart")
+        NextLevelLogger.info("nextLevelSessionWillStart")
     }
 
     func nextLevelSessionDidStart(_ nextLevel: NextLevel) {
-        print("nextLevelSessionDidStart")
+        NextLevelLogger.info("nextLevelSessionDidStart")
     }
 
     func nextLevelSessionDidStop(_ nextLevel: NextLevel) {
-        print("nextLevelSessionDidStop")
+        NextLevelLogger.info("nextLevelSessionDidStop")
     }
 
     // interruption
@@ -730,7 +730,7 @@ extension CameraViewController: NextLevelPhotoDelegate {
                         })
                     }
                 } else if let _ = error1 {
-                    print("failure capturing photo from video frame \(String(describing: error1))")
+                    NextLevelLogger.error("failure capturing photo from video frame \(String(describing: error1))")
                 }
 
             })
